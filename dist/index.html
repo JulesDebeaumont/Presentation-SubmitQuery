@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Diapo64</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/theme/black.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/highlight/monokai.css"
+    />
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section>
+          <h1>Diapo64</h1>
+        </section>
+
+        <section>
+          <h2>🚀 Query64 & Submit64</h1>
+          <p>Quoi, pourquoi et comment ?</p>
+        </section>
+
+        <section>
+          <section>
+            <h2>💙 Query64, c'est quoi ?</h2>
+            <br />
+            <ul>
+              <li>Librairie front et back (Vue et Rails)</li>
+              <li>Permet un affichage puissant des modèles en base</li>
+              <li>Fonctionnalités de tris, filtres, groupes etc.. </li>
+              <li>Hautement personnalisable</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2>💚 Submit64, c'est quoi ?</h2>
+            <br />
+            <ul>
+              <li>Librairie front et back (Vue et Rails)</li>
+              <li>Génération de formulaire sur les modèles en base</li>
+              <li>Fonctionnalités de règles, d'association et de validation</li>
+              <li>Hautement personnalisable</li>
+            </ul>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>Pourquoi ?</h2>
+            <br />
+             <ul>
+               <li>⏱️ Gagner du temps sur les projets futurs</li>
+               <li>📦 Réduire la duplication de code</li>
+               <li>🛠️ Faciliter la maintenance et les évolutions</li>
+               <li>🤝 Unifier les pratiques et outils de l'équipe</li>
+               <li>🧪 Simplifier les tests et la validation</li>
+            </ul>
+          </section>
+          <section>
+            <h2>Pourquoi (à la base) ?</h2>
+            <br />
+             <ul>
+              <li>1 - Premier développement dans une de nos applications</li>
+              <li>2 - Communication avec l'équipe pour trouver des besoins similaires</li>
+              <li>3 - Portage en librarie avec fonctionnalités découplées</li>
+            </ul>
+          </section>
+          <section>
+            <h2>Pourquoi (à mon sens) ?</h2>
+            <h6>MVC -> API REST + SPA</h6>
+            <br />
+            <div style="display: flex; justify-content: center; align-items: center;">
+            <div class="mermaid">
+              <pre>
+                %%{init: {'theme': 'dark', 'themeVariables': { 'darkMode': true }}}%%
+                flowchart TD
+                  A[FullStack] -- Découplage --> B[Backend];
+                  A[FullStack] -- Découplage --> C[Frontend];
+              </pre>
+            </div>
+            <div style="padding: 0 40px;"></div>
+            <div class="mermaid">
+              <pre>
+                %%{init: {'theme': 'dark', 'themeVariables': { 'darkMode': true }}}%%
+                flowchart TD
+                  A[Rails MVC] -- Découplage --> B[Rails API];
+                  A[Rails MVC] -- Découplage --> C[Vue + Quasar];
+              </pre>
+            </div>
+          </div>
+          </section>
+          <section>
+            <h2>Pourquoi (à mon sens) ?</h2>
+            <h6>MVC -> API REST + SPA</h6>
+            <br />
+             <ul>
+               <li>❌ Perte de productivité</li>
+               <li>❌ Plus de code, d'outils à connaitre</li>
+               <li>⚠️ Maintenance focalisée mais spécialisée</li>
+               <li>✅ Découplage technique</li>
+               <li>✅ Fonctionnalités poussées en front</li>
+            </ul>
+          </section>
+          <section>
+            <h2>Pourquoi (à mon sens) ?</h2>
+            <h6>MVC -> API REST + SPA</h6>
+            <br />
+            <div>❗ Besoin métier projeté sur tout nos outils</div>
+            <br />
+            <ul>
+              <li>-> Duplication des besoins sur nos outils</li>
+              <li>-> Coordination permanante de nos outils</li>
+            </ul>
+          </section>
+                    <section>
+            <h2>Pourquoi (à mon sens) ?</h2>
+            <h6>MVC -> API REST + SPA</h6>
+            <div>Exemple 1</div>
+<pre>
+              <code class=language-ruby># backend
+class User < ApplicationRecord
+  def can_see_article?(article)
+    id == article.author_id
+  end
+end</code></pre>
+<pre>
+              <code class=language-typescript>// frontend
+function currentUserCanSeeArticle(article) {
+  return currentUser.value.id === article.author_id
+}
+// &lt;q-btn v-if="currentUserCanSeeArticle(article)" /&gt;</code></pre>
+          </section>
+          <section>
+            <h2>Pourquoi (à mon sens) ?</h2>
+            <h6>MVC -> API REST + SPA</h6>
+            <div>Exemple 2</div>
+<pre>
+              <code class=language-ruby># backend
+class Article < ApplicationRecord
+  validates :title, length: { minimum: 3 }
+end</code></pre>
+<pre>
+              <code class=language-html>&lt;!-- frontend --&gt
+&lt;q-input 
+ v-model="article.title"
+ :rules="[(val) => !!val || val.length >= 3 || 'Minimum 3']" 
+/&gt;</code></pre>
+          </section>
+          <section>
+            <h2>Pourquoi (à mon sens) ?</h2>
+            <h6>MVC -> API REST + SPA</h6>
+            <div>Exemple 3</div>
+<pre>
+              <code class=language-ruby># backend
+Rails.application.route.draw do
+
+  # POST https://mon-application/api/login
+  post 'api/login', to: 'application#login'
+
+end</code></pre>
+<pre>
+              <code class=language-typescript>// frontend
+async function login(): Promise&lt;unknown&gt; {
+  return (
+    await api.post('https://mon-application/api/login')
+  ).data;
+}</code></pre>
+          </section>
+                    <section>
+            <h2>Pourquoi (à mon sens) ?</h2>
+            <h6>Solution.. ?</h6>
+            <div style="display: flex; align-items: center; justify-content: center;">
+
+            <div class="mermaid">
+              <pre>
+                %%{init: {'theme': 'dark', 'themeVariables': { 'darkMode': true }}}%%
+                flowchart TD
+                  A[Besoins métier] --> B[Backend];
+                  A[Besoins métier] --> C[Frontend];
+                  B[Backend] <-- Duplication & Synchronisation --> C[Frontend];
+                  linkStyle 2 stroke:red,stroke-width:2px
+              </pre>
+            </div>
+                        <div style="padding: 0 60px;">➡️</div>
+                        <div class="mermaid">
+              <pre>
+                %%{init: {'theme': 'dark', 'themeVariables': { 'darkMode': true }}}%%
+                flowchart TD
+                  A[Besoins métier] --> B[Backend];
+                  A[Besoins métier] --> C[Frontend];
+                  B[Backend] <-- <span style="color:green">Communication automatisée</span> --> C[Frontend];
+                  linkStyle 2 stroke:green,stroke-width:2px
+              </pre>
+            </div>
+                        </div>
+
+          </section>
+
+        </section>
+
+        <section>
+          <section>
+            <h2>Query64</h2>
+              <img src="https://raw.githubusercontent.com/CHUReimsDSN/Query64-Rails/refs/heads/main/assets/logo.png" width="400">
+              <img src="https://raw.githubusercontent.com/CHUReimsDSN/Query64-Vue/refs/heads/main/assets/logo.png" width="400">
+          </section>
+
+          <section>
+            <h2>Query64</h2>
+            <h6>Objectif</h6>
+            <div>Consultation de données en masse</div>
+          </section>
+
+          <section>
+            <h2>Query64</h2>
+            <h6>Features</h6>
+            <ul>
+              <li>Filtrages, regroupements, tris</li>
+              <li>Affichage sur-mesure</li>
+              <li>Politique de sécurité pour colonnes & lignes</li>
+              <li>Système de préférences</li>
+              <li>Pagination fluide</li>
+              <li>Rapidité et scalabilité</li>
+              <li>Intégration à des features externes possible</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2>Query64</h2>
+            <h6>Preview</h6>
+            <img src="images/query64_preview.png" />
+          </section>
+
+          <section>
+            <h2>Query64</h2>
+            <h6>Procédure</h6>
+            <br />
+            <ul>
+              <li>-> Définition du besoin métier coté serveur (données, politiques de sécurité, etc..)</li>
+              <li>-> Définition de la transmission des données serveur-client</li>
+              <li>-> Récupération des données coté client</li>
+              <li>-> Echanges entre serveur et client automatiques</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2>Query64</h2>
+            <h6>Exemple : Définition des colonnes</h6>
+            <pre>
+              <code class=language-ruby>def self.query64_column_builder
+  [
+    {
+      columns_to_include: ['*'],
+    }
+  ]
+end</code></pre>
+          </section>
+
+          <section>
+            <h2>Query64</h2>
+            <h6>Exemple : Définition des colonnes</h6>
+            <pre>
+              <code class=language-ruby>def self.query64_column_builder
+  [
+    {
+      columns_to_include: ['id', 'titre', 'description'],
+    }
+  ]
+end</code></pre>
+          </section>
+
+          <section>
+            <h2>Query64</h2>
+            <h6>Exemple : Définition des colonnes</h6>
+            <pre>
+              <code class=language-ruby>def self.query64_column_builder
+  [
+    {
+      columns_to_include: ['*'],
+      columns_to_exclude: ['description'],
+    },
+    {
+      columns_to_include: ['*'],
+      association_name: :auteur
+    }
+  ]
+end</code></pre>
+          </section>
+
+          <section>
+            <h2>Query64</h2>
+            <h6>Exemple : Définition des politiques de sécurité</h6>
+            <pre>
+              <code class=language-ruby>def self.query64_column_builder
+  [
+    {
+      columns_to_include: ['*'],
+      allowed: -> (current_user) { current_user&.admin? }
+    }
+  ]
+end</code></pre>
+          </section>
+
+          <section>
+            <h2>Query64</h2>
+            <h6>Exemple : Définition des filtres</h6>
+             <pre>
+              <code class=language-ruby>def self.query64_additional_row_filters
+  [
+    {
+      filter: {
+        column: 'auteur_id',
+        type: 'equals',
+        value: User.current&.id
+      }
+    }
+  ]
+end</code></pre>
+          </section>
+          <section>
+            <h2>Query64</h2>
+            <h6>Exemple : Définition des filtres</h6>
+             <pre>
+              <code class=language-ruby>def self.query64_additional_row_filters
+  [
+    {
+      filter: {
+        column: 'publie_le',
+        type: 'greaterThan',
+        value: DateTime.new(2025, 9, 3)
+      },
+      statement: -> (current_user) { current_user.admin? }
+    }
+  ]
+end</code></pre>
+          </section>
+
+          <section>
+            <h2>Query64</h2>
+            <h6>Exemple : Configuration frontend</h6>
+            <pre> 
+              <code class=language-html>&lt;!-- Frontend --&gt;
+&lt;Query64Grid
+  resourceName="Article"
+  :getMetadata="getMetadatas"
+  :getRows="getRows"
+/&gt;</code></pre>
+          </section>
+
+          <section>
+            <h2>Query64</h2>
+            <h6>Showcase : HomePOP</h6>
+          </section>
+        </section>
+
+        <section>
+         <section>
+            <h2>Submit64</h2>
+              <img src="https://raw.githubusercontent.com/CHUReimsDSN/Submit64-Rails/refs/heads/main/assets/logo.png" width="400">
+              <img src="https://raw.githubusercontent.com/CHUReimsDSN/Submit64-Vue/refs/heads/dev/assets/logo.png" width="400">
+          </section>
+
+            <section>
+            <h2>Submit64</h2>
+            <h6>Objectif</h6>
+            <div>Génération de formulaire automatique</div>
+          </section>
+
+          <section>
+            <h2>Submit64</h2>
+            <h6>Features</h6>
+            <ul>
+              <li>Validations serveur retranscrites au client</li>
+              <li>Affichage sur-mesure</li>
+              <li>Politique de sécurité par champ/section</li>
+              <li>Système de selection pour les associations</li>
+              <li>Intégration à des features externes possible</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2>Submit64</h2>
+            <h6>Preview</h6>
+            <img src="images/submit64_preview.png" width="600" />
+          </section>
+
+          <section>
+            <h2>Submit64</h2>
+            <h6>Procédure</h6>
+            <br />
+            <ul>
+              <li>-> Définition du besoin métier coté serveur (champ, politiques de sécurité, etc..)</li>
+              <li>-> Définition de la transmission des données serveur-client</li>
+              <li>-> Récupération des données coté client</li>
+              <li>-> Echanges entre serveur et client automatiques</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2>Submit64</h2>
+            <h6>Exemple : Définition</h6>
+            <pre>
+              <code class=language-ruby># backend
+class Pole < ApplicationRecord
+  extend Submit64::MetadataProvider      
+
+  def self.submit64_form_builder
+    {
+      sections: [
+        {
+          label: "Général",
+          fields: [:libelle, :code, :date_debut, :date_fin]
+        }
+      ]
+    }
+  end
+end</code></pre>
+          </section>
+
+           <section>
+            <h2>Submit64</h2>
+            <h6>Exemple : Définition</h6>
+            <pre>
+              <code class=language-ruby>belongs_to :responsable
+
+def self.submit64_form_builder
+  {
+    sections: [
+      {
+        label: "Relations",
+        fields: [:responsable]
+      }
+    ]
+  }
+end</code></pre>
+          </section>
+
+          <section>
+            <h2>Submit64</h2>
+            <h6>Exemple : Définition avancée</h6>
+            <pre>
+              <code class=language-ruby>def self.submit64_form_builder
+  {
+    sections: [
+      {
+        fields: [
+          {
+            target: :libelle,
+            policy: (current_user) -> { current_user.admin? },
+            label: "Mon libelle custom",
+          }
+        ]
+      }
+    ]
+  }
+end</code></pre>
+          </section>
+
+          <section>
+            <h2>Submit64</h2>
+            <h6>Exemple : Validations</h6>
+            <pre>
+              <code class=language-ruby>validates :libelle, length: { minimum: 3 }
+
+def self.submit64_form_builder
+  {
+    sections: [
+      {
+        fields: [:libelle]
+      }
+    ]
+  }
+end</code></pre>
+          </section>
+
+          <section>
+            <h2>Submit64</h2>
+            <h6>Exemple : Configuration Frontend</h6>
+            <pre>
+              <code class=language-html>&lt;Submit64Form
+  resourceName="Pole"
+  :resourceId="1"
+  :getMetadataAndData="getMetadataAndResourceDataSubmit64"
+  :getAssociationData="getAssociationDataSubmit64"
+/&gt;</code></pre>
+          </section>
+
+          <section>
+            <h2>Submit64</h2>
+            <h6>Showcase</h6>
+            <br />
+            <div>Pas encore dispo ♿</div>
+          </section>
+        </section>
+
+        <section>
+           <section>
+            <h2>🧬 Interopérabilité </h2>
+            <h6>Comment ça communique ?</h6>
+            <h6>Comment le client sait que.. ?</h6>
+            <h6>Comment le serveur sait que.. ?</h6>
+            <h6>Comment transitent les données ?</h6>
+          </section>
+          <section>
+            <h2>🧬 Interopérabilité </h2>
+            <h6>Comment ça communique ?</h6>
+            <br />
+            <ul>
+              <li>Le développeur décide !</li>
+              <li>Protocole dogmatique tout de même : HTTP</li>
+              <li>Le client demande, le serveur répond</li>
+              <li>Données sous formes JSON implémentant des normes (interfaces)</li>
+              <li>-> compatibilité avec d'autres technologies (exemple: Query64-React + Query64-Rails)</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2>🧬 Interopérabilité </h2>
+            <h6>Comment ça communique ?</h6>
+            <div class="mermaid">
+              <pre>
+                %%{init: {'theme': 'dark', 'themeVariables': { 'darkMode': true }}}%%
+                flowchart TD
+                  A[Frontend] -- Demande --> B[Backend];
+                  B[Backend] -- Répond --> A[Frontend];
+                  B[Backend] -. Implémente .-> C[Logique métier];
+              </pre>
+            </div>
+          </section>
+          <section>
+            <h2>🧬 Interopérabilité </h2>
+            <h6>Exemple : Submit64</h6>
+             <pre>
+              <code class=language-html>&lt;Submit64Form
+  // comportement & configuration
+  resourceName="Pole"
+  :resourceId="1"
+
+  // Interopérabilité
+  :getMetadataAndData="getDataSubmit64"
+/&gt;</code></pre>
+          </section>
+          <section>
+            <h2>🧬 Interopérabilité </h2>
+            <h6>Exemple : Submit64 en front (javascript)</h6>
+             <pre>
+              <code class=language-javascript>async function getDataSubmit64(submit64Params) {
+  return (
+    await api.post(`.../api/get-data-submit64`, {
+      submit64Params,
+    })
+  ).data;
+}</code></pre>
+          </section>
+                    <section>
+            <h2>🧬 Interopérabilité </h2>
+            <h6>Exemple : Submit64 en front (typescript)</h6>
+             <pre>
+              <code class=language-typescript>import type { 
+  TResourceFormMetadataAndData, 
+  TSubmit64GetMetadataAndData 
+} from 'submit64-vue';
+
+async function getDataSubmit64(
+  submit64Params: TSubmit64GetMetadataAndData
+): Promise&lt;TResourceFormMetadataAndData&gt; {
+  return (
+    await api.post(`.../api/get-data-submit64`, {
+      submit64Params,
+    })
+  ).data;
+}</code></pre>
+          </section>
+            <section>
+            <h2>🧬 Interopérabilité </h2>
+            <h6>Exemple : Submit64 en back</h6>
+             <pre>
+              <code class=language-ruby>post 'api/get-data-submit64', to: 'resources#get_data_submit64'
+
+class ResourceController < ApplicationController
+
+  def get_metadata_and_data_submit64
+    sane_params = Submit64.permit_metadata_and_data_params(params)
+    data = Submit64.get_metadata_and_data(sane_params)
+    render json: data
+  end
+
+end</code></pre>
+          </section>
+          <section>
+            <h2>🧬 Interopérabilité </h2>
+            <h6>Avantages de l'approche</h6>
+             <ul>
+              <li>Intervention du développeur à n'importe quel moment de l'Interopérabilité</li>
+              <li>Avantages du fameux découplage technique sans les inconvénients</li>
+             </ul>
+          </section>
+        </section>
+
+        <section>
+
+          <section>
+            <h2>👀 Et après ? </h2>
+            <ul>
+              <li>-> Surveiller l'implémentation des librairies dans nos applications</li>
+              <li>-> Adapter les fonctionnalités si besoin</li>
+              <li>-> Bilan de leur utilisation après une période de test</li>
+              <li>=> Encore plus de libraries si pertinant</li>
+            </ul>
+          </section>
+          <section>
+          <h2>💡 Quelques idées </h2>
+          <ul>
+            <li>Système de politique de sécurité globale</li>
+            <li>Système de synchronisation automatique des routes API (et des types)</li>
+            <li>Système de télémétrie (état du serveur consultable par le client)</li>
+            <li>Système de rapport d'erreur client remonté au serveur</li>
+            <li>Système de génération de documentation utilisateur</li>
+          </ul>
+        </section>
+        </section>
+        
+        <section>
+          <section>
+            <h2>Vos avis ?</h2>
+            <h2>Des questions ?</h2>
+            <h2>🚾 ?</h2>
+          </section>
+          <section>
+            <h2>Pourquoi 64?</h2>
+            <h6>Aucune idée ça sonnait bien</h6>
+          </section>
+        </section>
+          
+        <section>
+          <h2>Ressource</h2>
+          <p></p>
+          <p><a href="https://github.com/CHUReimsDSN">GitHub CHU-Reims</a></p>
+          <p style="font-size: 26px;">🔓 Open Source</p>
+        </section>
+
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/highlight/highlight.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js-mermaid-plugin@11.4.1/plugin/mermaid/mermaid.js"></script>
+    <script>
+      Reveal.initialize({
+        hash: true,
+        slideNumber: true,
+        plugins: [RevealHighlight, RevealMermaid],
+        mermaid: {},
+      });
+    </script>
+  </body>
+</html>
